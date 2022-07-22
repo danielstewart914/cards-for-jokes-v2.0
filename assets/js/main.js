@@ -93,7 +93,7 @@ function initialize () {
 
   if ( themeIndex !== null ) {
 
-    // if there is a them selected add highlight to selected theme card
+    // if there is a theme selected add highlight to selected theme card
     userModal.children().children().children( 'img' ).eq( themeIndex ).addClass( 'selected-theme' );
     themeDisplayEl.attr( 'src',  themes[ themeIndex ] );
     changeTheme();
@@ -131,27 +131,19 @@ function initialize () {
 
 function changeTheme () {
 
-  if ( themeIndex > 0 ) {
-
-     documentRootEl.css( '--cardThemeUrl', `url( '../.${ themes[ themeIndex ] }' )` );
-  
-  } else {
-
-    documentRootEl.css( '--cardThemeUrl', `url( '${ themes[ themeIndex ] }' )` );
-
-  }
-  
+  if ( themeIndex > 0 ) documentRootEl.css( '--cardThemeUrl', `url( '../.${ themes[ themeIndex ] }' )` );
+  else documentRootEl.css( '--cardThemeUrl', `url( '${ themes[ themeIndex ] }' )` );
 
 }
 
 // Get Joke from Joke API
 async function getJoke() {
+
   const response = await fetch(jokeAPIUrl);
-  if (response.ok) {
-    return response.json();
-  } else {
-    console.error( 'Error: ' + response.statusText );
-  } 
+
+  if (response.ok) return response.json();
+  else console.error( 'Error: ' + response.statusText ); 
+
 }
 
 
@@ -160,15 +152,8 @@ async function getNewDeck( deckCount ) {
 
   const response = await fetch(`${ deckOfCardApiRootUrl }/new/shuffle/?deck_count=${ deckCount }`);
 
-  if (response.ok) {
-
-    return response.json();
-
-  } else {
-
-    console.error( 'Error: ' + response.statusText );
-
-  } 
+  if (response.ok) return response.json();
+  else console.error( 'Error: ' + response.statusText ); 
 
 }
 
@@ -177,32 +162,18 @@ async function shuffleDeck ( id, onlyRemaining ) {
 
   const response = await fetch( `${ deckOfCardApiRootUrl }/${ id }/shuffle/?remaining=${ onlyRemaining }` );
 
-  if ( response.ok ) {
-
-    return response.json();
-
-  } else {
-
-    console.error( 'Error: ' + response.statusText );
-
-  } 
+  if ( response.ok ) return response.json();
+  else console.error( 'Error: ' + response.statusText );
     
-    }
+}
 
 // draw card(s) 
 async function drawCard( numberOfCards ) {
 
   const response = await fetch( `${ deckOfCardApiRootUrl }/${ deckId.id }/draw/?count=${ numberOfCards }` );
 
-  if ( response.ok ) {
-
-    return response.json();
-
-  } else {
-
-    console.error( 'Error: ' + response.statusText );
-
-  }
+  if ( response.ok ) return response.json();
+  else console.error( 'Error: ' + response.statusText );
 
 }
 
@@ -211,43 +182,46 @@ function renderBottomRow () {
 
   // first shuffle deck
   shuffleDeck( deckId.id, false )
-    .then ( function () {
+  .then ( function () {
 
-    // draw all cards
-    drawCard( 52 )
-    .then ( function ( data ) {
+  // draw all cards
+  drawCard( 52 )
+  .then ( function ( data ) {
 
-      var rowFrag = $( document.createDocumentFragment() );
+    var rowFrag = $( document.createDocumentFragment() );
 
-      // render cards to fragment
-      for( var i = 0; i < data.cards.length; i++ ) {
+    // render cards to fragment
+    for( var i = 0; i < data.cards.length; i++ ) {
 
-          var cardImageEl = $( '<img>' ).attr( 'src', data.cards[i].image );
-          rowFrag.append( cardImageEl );
-  
-      }
+        var cardImageEl = $( '<img>' ).attr( 'src', data.cards[i].image );
+        rowFrag.append( cardImageEl );
 
-      // set contents of with bottom row element with fragment
-      bottomCardRowEl.html( rowFrag );
+    }
 
-    } ).then( function() {
-      shuffleDeck(deckId.id, false);
-    })
+    // set contents of with bottom row element with fragment
+    bottomCardRowEl.html( rowFrag );
 
-  } );
+  } )
+  .then( function() { shuffleDeck(deckId.id, false) });
+
+} );
 
 }
 
 function saveUserName() {
 
+  // if there is a username store it in username
   if ( usernameEntryEl.val() ) userName = usernameEntryEl.val();
 
+  // if no theme selected change to default theme and store in local storage
   if ( themeIndex === null ) {
     
     themeIndex = 6;
     localStorage.setItem( 'deck_theme', themeIndex );
+
   }
 
+  // save username in local storage
   localStorage.setItem( 'user_name', userName );
 
 }
