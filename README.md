@@ -1,6 +1,6 @@
 # Cards for Jokes
 ## Deployed Application
-[Deployed Application](https://danielstewart914.github.io/cards-for-jokes-v2.0/`)
+[Deployed Application](https://danielstewart914.github.io/cards-for-jokes-v2.0/)
 ## Description
 ### A Funny Game of Cards<br>
 
