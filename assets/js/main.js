@@ -11,7 +11,7 @@ const themes = [
   'https://deckofcardsapi.com/static/img/back.png', 
   './assets/images/batman-deck-theme.jpg', 
   './assets/images/awkward-turtle-deck-theme.jpg', 
-  './assets/images/mountain-deck-theme.jpg', 
+  './assets/images/mountain-deck-theme.jpg',
   './assets/images/humming-bird-deck-theme.jpg', 
   './assets/images/mountain-deck-theme-2.jpg',
   './assets/images/jokercard.jpeg'
