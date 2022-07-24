@@ -1,11 +1,11 @@
-var centerThemeCard = $('#center-theme');
-var userCardEl = $('#user-card');
-var computerCardEl = $('#computer-card');
-var hilariousEl = $('#hilarious')
-var jokeModal = $( '#jokeModal' );
-var jokeBoxEl = $( '#jokeBox' );
-var loseTieEl = $( '#lose-tie' );
-var score = 0;
+const centerThemeCard = $('#center-theme');
+const userCardEl = $('#user-card');
+const computerCardEl = $('#computer-card');
+const hilariousEl = $('#hilarious')
+const jokeModal = $( '#jokeModal' );
+const jokeBoxEl = $( '#jokeBox' );
+const loseTieEl = $( '#lose-tie' );
+let score = 0;
 
 const saveHighScore = () => {
 
