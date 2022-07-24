@@ -7,6 +7,25 @@ var jokeBoxEl = $( '#jokeBox' );
 var loseTieEl = $( '#lose-tie' );
 var score = 0;
 
+const saveHighScore = () => {
+
+  const highScores = JSON.parse( localStorage.getItem( 'scoreBoard' ) ) || [];
+
+  const currentScore = {
+    name: userName,
+    score: score
+  }
+
+  highScores.push( currentScore );
+
+  highScores.sort( ( a, b ) => b.score - a.score );
+
+  if ( highScores.length > 10 ) highScores.pop(); 
+
+  localStorage.setItem( 'scoreBoard', JSON.stringify( highScores ) );
+
+}
+
 /* Determine the winner based on the card value of user and computer */
 
 function determineWinner(user_val, comp_val, remaining) {
@@ -81,28 +100,10 @@ centerThemeCard.on('click', function(event) {
   });
 });
 
-function finalScore(){
-// score moved to save in LS at final score function
-  localStorage.setItem("score", JSON.stringify(score));
-  //variable to grab previous username and score from local storage and if no previous data, empty array
-  var previousScores = JSON.parse(localStorage.getItem("scoreBoard")) || [];
-  // username value to save to new object
-  var user_name = localStorage.getItem("user_name")
-  // new score object to save current game data
-  var newScore = {
-    name: user_name,
-    score: score,
-  };
-// push new score object to previous score array
-  previousScores.push(newScore);
-
-  localStorage.setItem("scoreBoard", JSON.stringify(previousScores));
-};
-
 function endGame(remaining) {
 
   if (remaining == 0){
-    finalScore()
+    saveHighScore();
 
     $( '.game-play' ).addClass( 'hidden' );
     loseTieEl.addClass( 'hidden' );
