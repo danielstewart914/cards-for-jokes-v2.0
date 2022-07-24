@@ -172,12 +172,6 @@ summary {
     font-family:'Poppins', sans-serif;
 }
 
-#jokeBox {
-    border: solid black 1px;
-    width: 22rem;
-    flex-direction: column;
-}
-
 #bottomCardRow {
     border: black 2px solid;
     background-color: #8E7044;
