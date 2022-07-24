@@ -1,11 +1,12 @@
-var bottomCardRowEl = $( '#bottomCardRow' );
-var deckOfCardApiRootUrl = 'https://deckofcardsapi.com/api/deck';
-var deckId = JSON.parse( localStorage.getItem( 'deck_id' ) ) || {};
-var documentRootEl = $( ':root' );
+// elements used on all pages
+const bottomCardRowEl = $( '#bottomCardRow' );
+const deckOfCardApiRootUrl = 'https://deckofcardsapi.com/api/deck';
+let deckId = JSON.parse( localStorage.getItem( 'deck_id' ) ) || {};
+const documentRootEl = $( ':root' );
 
 // user settings
-var userName = localStorage.getItem( 'user_name' );
-var themeIndex =  localStorage.getItem( 'deck_theme' );
+let userName = localStorage.getItem( 'user_name' );
+let themeIndex =  localStorage.getItem( 'deck_theme' );
 
 const themes = [ 
   'https://deckofcardsapi.com/static/img/back.png', 
@@ -18,56 +19,50 @@ const themes = [
 ];
 
 // index.html elements
-var highCardGameEl = $( '#highCardGame' );
-var userModal = $( '#user-modal' );
-var playGameElButton = $( '#play-game' );
-var welcomeDisplayEl = $( '#welcome-display' );
-var saveUserSettingsButtonEl = $( '#save-user-settings' );
-var changeUSerSettingsButtonEl = $( '#change-user-settings' );
-var userNameDisplayEl = $( '#user-name' );
-var usernameEntryEl = $( '#username-entry' );
-var nameEntryErrorEl = $( '#name-entry-error' );
-var themeDisplayEl = $( '#theme-display' );
+const highCardGameEl = $( '#highCardGame' );
+const userModal = $( '#user-modal' );
+const playGameElButton = $( '#play-game' );
+const welcomeDisplayEl = $( '#welcome-display' );
+const saveUserSettingsButtonEl = $( '#save-user-settings' );
+const changeUSerSettingsButtonEl = $( '#change-user-settings' );
+const userNameDisplayEl = $( '#user-name' );
+const usernameEntryEl = $( '#username-entry' );
+const nameEntryErrorEl = $( '#name-entry-error' );
+const themeDisplayEl = $( '#theme-display' );
 
 //  joke variables
-var jokeAPIUrl ='https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&amount=1';
-var currentJoke;
-var myJokes= [];
+const jokeAPIUrl ='https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&amount=1';
+let currentJoke;
+const myJokes = JSON.parse( localStorage.getItem( 'jokes' ) ) || [];
 
 // save jokes to local storage
-function saveJoke(){
+const saveJoke = () => {
 
   // if joke is already saved return out of function
-  var jokeIndex = myJokes.findIndex( jokes => jokes.id === currentJoke.id );
+  const jokeIndex = myJokes.findIndex( jokes => jokes.id === currentJoke.id );
   if ( jokeIndex >= 0 ) return;
 
   // push current joke to joke array and save to local storage
-  myJokes.push(currentJoke);
-  localStorage.setItem("jokes", JSON.stringify(myJokes));
+  myJokes.push( currentJoke );
+  localStorage.setItem( 'jokes', JSON.stringify( myJokes ) );
 
-}
-
-// load jokes from local storage
-function loadJokesJSON(){
-  var jokesJSON = localStorage.getItem("jokes");
-  myJokes = JSON.parse(jokesJSON);
 }
 
 // initialize modals on all pages where main.js is loaded
-$(document).ready(function(){
-  $('.modal').modal();
+$( document ).ready( () => {
+  $( '.modal' ).modal();
 });
 
 // initialize sidenav
-$(document).ready(function () {
-  $(".sidenav").sidenav();
+$( document ).ready( () => {
+  $( '.sidenav' ).sidenav();
 });
 
 // returns true if time stamp is older than two weeks
-function isTimeStampOlderThanTwoWeeks ( timeStamp, now) {
+const isTimeStampOlderThanTwoWeeks = ( timeStamp, now) => {
   
   // get the difference between timestamp and now
-  var difference = now.diff( luxon.DateTime.fromISO( timeStamp ) );
+  const difference = now.diff( luxon.DateTime.fromISO( timeStamp ) );
 
   // if the timestamp is older than two weeks get a new on
   if( difference.as( 'weeks' ) > 2 ) return true;
@@ -77,12 +72,8 @@ function isTimeStampOlderThanTwoWeeks ( timeStamp, now) {
 }
 
 // initialize data
-function initialize () {
+const initialize = () => {
 
-  // if there is a joke stored load jokes into joke array
-  if (localStorage.getItem("jokes")){
-    loadJokesJSON();
-  }
   // if there is a user name show welcome element
   if ( userName ) {
 
@@ -129,86 +120,15 @@ function initialize () {
 
 }
 
-function changeTheme () {
+const changeTheme = () => {
 
   if ( themeIndex > 0 ) documentRootEl.css( '--cardThemeUrl', `url( '../.${ themes[ themeIndex ] }' )` );
   else documentRootEl.css( '--cardThemeUrl', `url( '${ themes[ themeIndex ] }' )` );
 
 }
 
-// Get Joke from Joke API
-async function getJoke() {
-
-  const response = await fetch(jokeAPIUrl);
-
-  if (response.ok) return response.json();
-  else console.error( 'Error: ' + response.statusText ); 
-
-}
-
-
-// get new deck
-async function getNewDeck( deckCount ) {
-
-  const response = await fetch(`${ deckOfCardApiRootUrl }/new/shuffle/?deck_count=${ deckCount }`);
-
-  if (response.ok) return response.json();
-  else console.error( 'Error: ' + response.statusText ); 
-
-}
-
-// shuffle deck
-async function shuffleDeck ( id, onlyRemaining ) {
-
-  const response = await fetch( `${ deckOfCardApiRootUrl }/${ id }/shuffle/?remaining=${ onlyRemaining }` );
-
-  if ( response.ok ) return response.json();
-  else console.error( 'Error: ' + response.statusText );
-    
-}
-
-// draw card(s) 
-async function drawCard( numberOfCards ) {
-
-  const response = await fetch( `${ deckOfCardApiRootUrl }/${ deckId.id }/draw/?count=${ numberOfCards }` );
-
-  if ( response.ok ) return response.json();
-  else console.error( 'Error: ' + response.statusText );
-
-}
-
-// render bottom row of cards on main screen
-function renderBottomRow () {
-
-  // first shuffle deck
-  shuffleDeck( deckId.id, false )
-  .then ( function () {
-
-  // draw all cards
-  drawCard( 52 )
-  .then ( function ( data ) {
-
-    var rowFrag = $( document.createDocumentFragment() );
-
-    // render cards to fragment
-    for( var i = 0; i < data.cards.length; i++ ) {
-
-        var cardImageEl = $( '<img>' ).attr( 'src', data.cards[i].image );
-        rowFrag.append( cardImageEl );
-
-    }
-
-    // set contents of with bottom row element with fragment
-    bottomCardRowEl.html( rowFrag );
-
-  } )
-  .then( function() { shuffleDeck(deckId.id, false) });
-
-} );
-
-}
-
-function saveUserName() {
+// change user name function
+const saveUserName = () => {
 
   // if there is a username store it in username
   if ( usernameEntryEl.val() ) userName = usernameEntryEl.val();
@@ -226,10 +146,83 @@ function saveUserName() {
 
 }
 
+// Get Joke from Joke API
+const getJoke = async () => {
+
+  const response = await fetch(jokeAPIUrl);
+
+  if (response.ok) return response.json();
+  else console.error( 'Error: ' + response.statusText ); 
+
+}
+
+
+// get new deck
+const getNewDeck = async ( deckCount ) => {
+
+  const response = await fetch(`${ deckOfCardApiRootUrl }/new/shuffle/?deck_count=${ deckCount }`);
+
+  if (response.ok) return response.json();
+  else console.error( 'Error: ' + response.statusText ); 
+
+}
+
+// shuffle deck
+const shuffleDeck = async ( id, onlyRemaining ) => {
+
+  const response = await fetch( `${ deckOfCardApiRootUrl }/${ id }/shuffle/?remaining=${ onlyRemaining }` );
+
+  if ( response.ok ) return response.json();
+  else console.error( 'Error: ' + response.statusText );
+    
+}
+
+// draw card(s) 
+const drawCard = async ( numberOfCards ) => {
+
+  const response = await fetch( `${ deckOfCardApiRootUrl }/${ deckId.id }/draw/?count=${ numberOfCards }` );
+
+  if ( response.ok ) return response.json();
+  else console.error( 'Error: ' + response.statusText );
+
+}
+
+// render bottom row of cards on main screen
+const renderBottomRow = () => {
+
+  // first shuffle deck
+  shuffleDeck( deckId.id, false )
+  .then ( () => {
+
+  // draw all cards
+  drawCard( 52 )
+  .then ( ( data ) => {
+
+    const rowFrag = $( document.createDocumentFragment() );
+
+    // render cards to fragment
+    data.cards.forEach( card => {
+
+      const cardImageEl = $( '<img>' ).attr( 'src', card.image );
+      rowFrag.append( cardImageEl );
+
+    } );
+
+    // set contents of with bottom row element with fragment
+    bottomCardRowEl.html( rowFrag );
+
+  } )
+  .then( () => { shuffleDeck( deckId.id, false ) } );
+
+} );
+
+}
+
+// global function calls
 initialize();
 
 
-highCardGameEl.on( 'click', function( event ) {
+highCardGameEl.on( 'click', ( event ) => {
 
   event.preventDefault();
 
@@ -246,7 +239,7 @@ highCardGameEl.on( 'click', function( event ) {
 } );
 
 // when you click on an image element in the modal ( themes )
-userModal.on( 'click', 'img', function ( event ) {
+userModal.on( 'click', 'img', ( event ) => {
 
   // theme that was clicked 
   var themeSelection = $( event.target );
@@ -268,7 +261,7 @@ userModal.on( 'click', 'img', function ( event ) {
 } );
 
 // when play game button is clicked
-playGameElButton.on( 'click', function() {
+playGameElButton.on( 'click', () => {
 
     // if no user name entered
     if ( !usernameEntryEl.val() ) {
@@ -286,7 +279,7 @@ playGameElButton.on( 'click', function() {
 } );
 
 // open modal with save button
-changeUSerSettingsButtonEl.on( 'click', function () {
+changeUSerSettingsButtonEl.on( 'click', () => {
 
   playGameElButton.addClass( 'hidden' );
   saveUserSettingsButtonEl.removeClass( 'hidden' );
@@ -295,7 +288,7 @@ changeUSerSettingsButtonEl.on( 'click', function () {
 } );
 
 //  save user settings
-saveUserSettingsButtonEl.on( 'click', function() {
+saveUserSettingsButtonEl.on( 'click', () => {
 
   saveUserName();
 
