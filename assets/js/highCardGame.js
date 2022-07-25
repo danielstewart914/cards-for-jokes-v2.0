@@ -66,21 +66,24 @@ const saveHighScore = () => {
 // return card value
 const getCardValue = value => {
 
-  let returnValue;
-  switch ( value ) {
 
-      case 'KING': returnValue = 13;
+  if ( isNaN( value ) ) {
+
+    switch ( value ) {
+
+      case 'KING': return 13;
       break;
-      case 'QUEEN': returnValue = 12;
+      case 'QUEEN': return 12;
       break;
-      case 'JACK': returnValue = 11;
+      case 'JACK': return 11;
       break;
-      case 'ACE': returnValue = 1;
-      break;
-      default: returnValue = parseInt( value );
+      case 'ACE': return 1;
+
+    }
+  
   }
 
-  return returnValue;
+  return parseInt( value );
 
 }
 
