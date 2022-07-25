@@ -39,7 +39,7 @@ const saveHighScore = () => {
 
   const currentScore = {
     name: userName,
-    score: score
+    score: playerScore
   }
 
   highScores.push( currentScore );
@@ -85,8 +85,31 @@ const determineWinner = () => {
 
   if ( playerCardValue > computerCardValue ) {
           
-      winLoseTie.text( 'You Win!' );
-      playerScore += playerCardValue;
+    winLoseTie.text( 'You Win!' );
+    playerScore += playerCardValue;
+
+    jokeBoxEl.text( '' );
+
+    jokeModal.modal( 'open' );
+
+    getJoke()
+    .then( (data) => {
+
+      if (data.type = 'single' && data.joke) {
+
+        jokeBoxEl.html( data.joke );
+
+        // save joke as object with type 1 and unique id
+        currentJoke = { type: 1, id: data.id, joke: data.joke };
+
+      } else {
+
+        jokeBoxEl.html( `<p>${data.setup}</p><p>${data.delivery}</p>` );
+
+        // save joke as object with type 2 and unique id
+        currentJoke = { type: 2, id: data.id, setup: data.setup, delivery: data.delivery };
+      }
+    } );
   }
 
   if ( playerCardValue < computerCardValue ) {
@@ -108,12 +131,21 @@ const gameOver = () => {
   winLoseTie.text( 'Game Over!' );
   $( '.game-over' ).removeClass( 'hidden' );
 
+  if ( playerScore > computerScore ) {
+    
+    console.log( 'hi' )
+    
+    saveHighScore();
+    winLoseTie.append( '<br>You Won the Game! - High Score Saved.' );
+
+  }
+
 }
 
 deckEl.on( 'click', () => {
 
   if( !canClickDeck ) return;
-
+  
   winLoseTie.addClass( 'invisible' );
 
   drawCard( 1 )

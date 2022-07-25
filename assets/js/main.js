@@ -86,7 +86,6 @@ const initialize = () => {
 
     // if there is a theme selected add highlight to selected theme card
     userModal.children().children().children( 'img' ).eq( themeIndex ).addClass( 'selected-theme' );
-    themeDisplayEl.attr( 'src',  themes[ themeIndex ] );
     changeTheme();
 
   }
@@ -122,7 +121,13 @@ const initialize = () => {
 
 const changeTheme = () => {
 
-  if ( themeIndex > 0 ) documentRootEl.css( '--cardThemeUrl', `url( '../.${ themes[ themeIndex ] }' )` );
+  themeDisplayEl.attr( 'src',  themes[ themeIndex ] );
+  $( '.playing-card-back > img' ).attr( 'src', themes[ themeIndex ] );
+
+  if ( themeIndex > 0 ) {
+    documentRootEl.css( '--cardThemeUrl', `url( '../.${ themes[ themeIndex ] }' )` );
+    documentRootEl.css( '--theme-border', '1px solid black' )
+  }
   else documentRootEl.css( '--cardThemeUrl', `url( '${ themes[ themeIndex ] }' )` );
 
 }

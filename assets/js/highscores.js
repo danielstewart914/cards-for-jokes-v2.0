@@ -27,8 +27,8 @@ $( '#clear-scores' ).on( 'click', () => {
   // rerender high scores
   highScoresEl.html( renderScores( highScores ) );
   
-  // save empty array to local storage
-  localStorage.setItem( 'scoreBoard', highScores );
+  // clear local storage
+  localStorage.removeItem( 'scoreBoard' );
 
 } );
 
