@@ -46,6 +46,10 @@ button {
     margin: 6px 8px !important;
 }
 
+.joke-page {
+    flex-direction: column;
+}
+
 .subtitle {
     text-align: center;
 }
