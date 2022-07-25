@@ -231,7 +231,7 @@ highCardGameEl.on( 'click', ( event ) => {
 
   event.preventDefault();
 
-  if( userName ) location.href = 'gamepage.html';
+  if( userName ) location.href = 'highCardGame.html';
 
   else {
     

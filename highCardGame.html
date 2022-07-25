@@ -73,7 +73,7 @@
     <div id="deck" class="playing-card-container deck">
         <div id="player-card" class="playing-card player-card">
             <div class="playing-card-back">
-                <img src="./assets/images/jokercard.jpeg">
+                <img src="">
             </div>
             <div class="playing-card-front">
                 <img id="player-drawn-image" src="">
@@ -81,14 +81,14 @@
         </div>
         <div id="computer-card" class="playing-card player-card push-back">
             <div class="playing-card-back">
-                <img src="./assets/images/jokercard.jpeg">
+                <img src="">
             </div>
             <div class="playing-card-front">
                 <img id="computer-drawn-image" src="">
             </div>
         </div>
         <div class="playing-card-back push-back">
-            <img src="./assets/images/jokercard.jpeg">
+            <img src="">
         </div>
     </div>
     <div class="game-over hidden">
@@ -104,11 +104,11 @@
     <div class="modal-content center-align">
       <h6>You Win!</h6>
       <h6>Here is a hilarious joke!</h6>
-      <div id="jokeBox"></div>
+      <div id="jokeDisplay" class="joke"></div>
     </div>
     <div class="modal-footer orange accent-4">
-      <h5 href="#" class="modal-close waves-effect waves-light btn brown darken-4 white-text" id="hilarious">SAVE JOKE</h5>
-      <h5 href="#" class="modal-close waves-effect waves-effect waves-light btn brown darken-4 white-text">NOT HILARIOUS!</h5>
+      <button class="modal-close waves-effect waves-light btn brown darken-4 white-text" id="hilarious">SAVE JOKE</button>
+      <button class="modal-close waves-effect waves-effect waves-light btn brown darken-4 white-text">NOT HILARIOUS!</button>
     </div>
     </div>
   </div>
@@ -119,6 +119,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.4.0/luxon.min.js" integrity="sha512-v1zUTZ9zv9Wb2scL/ANxXM6m7yegm/W5SN8SRHNFADdZIuSFFkrEBjNxO803DdFkjoCcJ88g1WHRVlLN6K/O1A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="./assets/js/main.js"></script>
-    <script src="./assets/js/gamepage.js"></script>
+    <script src="./assets/js/highCardGame.js"></script>
   </body>
 </html>

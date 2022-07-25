@@ -95,4 +95,5 @@ jokeContainerEl.on( 'click', '.delete-joke', ( event ) => {
 
 } );
 
+if ( myJokes.length )
  jokeContainerEl.html( renderJokes() );

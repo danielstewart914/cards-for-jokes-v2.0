@@ -10,10 +10,17 @@ body {
     font-family: 'Poppins', sans-serif;
     background-image: url(../images/background.jpg);
 
-}   
+} 
+
+h1 {
+    text-align: center;
+}
 
 body .modal {
-    width: 75vw;
+    margin-top: 50px;
+    width: 85vw;
+    border: solid black 2px;
+    border-radius: 0.5rem;
 }
 
 main {
@@ -21,7 +28,7 @@ main {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    padding-top: 140px;
+    padding-top: 180px;
     padding-bottom: 110px;
 }
 
@@ -35,6 +42,10 @@ nav {
     border-bottom: black solid 2px;
 }
 
+.subtitle {
+    text-align: center;
+}
+
 .sidenav {
     width: 6rem;
     border-right: solid black 1px;
@@ -44,22 +55,18 @@ nav {
     font-size: 1.5rem;
 }
 
-.games, .game-play {
+.games {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    padding: 0 3rem;
+    padding: 3rem;
     width: 100vw;
 }
 
 .game-play {
     margin-top: 110px;
-}
-
-.jokes {
-    margin-top: 90px;
 }
 
 .game-card {
@@ -134,10 +141,6 @@ summary {
     margin: 1rem;
 }
 
-#user-modal {
-    border: solid black 2px;
-}
-
 .modal-footer {
     border-top: solid black 1px;
 }
@@ -151,7 +154,7 @@ summary {
     text-align: center;
 }
 
-#rulesBox {
+.rules {
     display: flex;
     border: black solid 1px;
     opacity: 0.7;
@@ -160,34 +163,10 @@ summary {
     margin: 1rem;
 }
 
-#myJokes {
-    margin-top: 4rem;
-    font-family:'Poppins', sans-serif;
-}
-
 #bottomCardRow {
     border: black 2px solid;
     background-color: #8E7044;
     z-index: 4;
-}
-
-.userDeck {
-    opacity: 1;
-}
-
-.gameBox {
-    opacity: 1;
-    border: solid black 1px;;
-    background-image:url(../images/fleur.jpeg);
-
-}
-
-.gameBox:hover {
-    transform: scale(1);
-}
-
-.userDeck:hover {
-    transform: scale(1);
 }
 
 .deck-theme {
@@ -212,23 +191,18 @@ summary {
     align-items: center;
 }
 
-#jokeBox {
+.joke {
     border: 0;
     width: 100%;
     font-family: 'Poppins', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: blue;
+    margin-top: 2rem;
 }
 
-#joke-container {
-    font-size: 1.2rem;
+.jokes {
+    font-size: 1rem;
 
-}
-.label {
-    background-color: rgba(0, 0, 0, 0.309);
-    color: white;
-    margin: 1rem;
-    padding: .5em;
 }
 
 .deck {
@@ -304,7 +278,7 @@ summary {
 .score {
     position: absolute;
     width: 100%;
-    top: -3em;
+    top: -5em;
     text-align: center;
     font-size: 1.3rem;
 }

@@ -1,6 +1,6 @@
 const hilariousEl = $('#hilarious')
 const jokeModal = $( '#jokeModal' );
-const jokeBoxEl = $( '#jokeBox' );
+const jokeDisplayEl = $( '#jokeDisplay' );
 
 const deckEl = $( '#deck' );
 const playerCard = $( '#player-card' );
@@ -88,7 +88,7 @@ const determineWinner = () => {
     winLoseTie.text( 'You Win!' );
     playerScore += playerCardValue;
 
-    jokeBoxEl.text( '' );
+    jokeDisplayEl.text( '' );
 
     jokeModal.modal( 'open' );
 
@@ -97,14 +97,14 @@ const determineWinner = () => {
 
       if (data.type = 'single' && data.joke) {
 
-        jokeBoxEl.html( data.joke );
+        jokeDisplayEl.html( data.joke );
 
         // save joke as object with type 1 and unique id
         currentJoke = { type: 1, id: data.id, joke: data.joke };
 
       } else {
 
-        jokeBoxEl.html( `<p>${data.setup}</p><p>${data.delivery}</p>` );
+        jokeDisplayEl.html( `<p>${data.setup}</p><p>${data.delivery}</p>` );
 
         // save joke as object with type 2 and unique id
         currentJoke = { type: 2, id: data.id, setup: data.setup, delivery: data.delivery };
@@ -213,6 +213,12 @@ computerCard.on( 'animationend', () => {
   if ( cardsRemaining < 2 ) gameOver();
   else canClickDeck = true;
 
+} );
+
+hilariousEl.on( 'click', () => {
+
+  saveJoke();
+  
 } );
 
 homeButtonEl.on( 'click', () => location.href = 'index.html' );
