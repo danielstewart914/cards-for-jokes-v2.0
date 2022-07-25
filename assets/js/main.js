@@ -247,10 +247,10 @@ highCardGameEl.on( 'click', ( event ) => {
 userModal.on( 'click', 'img', ( event ) => {
 
   // theme that was clicked 
-  var themeSelection = $( event.target );
+  const themeSelection = $( event.target );
 
   // everything else
-  var otherThemes = userModal.children().children().children( 'img' ).not( themeSelection );
+  const otherThemes = userModal.children().children().children( 'img' ).not( themeSelection );
 
   // add highlight class and remove from others
   themeSelection.addClass( 'selected-theme' );
