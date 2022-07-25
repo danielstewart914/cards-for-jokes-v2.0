@@ -1,38 +1,49 @@
-const hilariousEl = $('#hilarious')
+// joke modal elements
+const saveJokeButtonEl = $('#save-joke')
 const jokeModal = $( '#jokeModal' );
 const jokeDisplayEl = $( '#jokeDisplay' );
 
+// general elements
 const deckEl = $( '#deck' );
+const winLoseTie = $( '#win-lose-tie' );
+
+// player card elements
+const playerNameEl = $( '#player-name' );
+const playerScoreEl = $( '#player-score' );
 const playerCard = $( '#player-card' );
 const playerDrawnImage = $( '#player-drawn-image' );
-const computerDrawnImage = $( '#computer-drawn-image' );
-const computerCard = $( '#computer-card' );
-const computerDiscardPile = $( '#computer-discard-pile' );
-const computerDiscardImage = $( '#computer-discarded-image' );
 const playerDiscardPile = $( '#player-discard-pile' );
 const playerDiscardedImage = $( '#player-discarded-image' );
-const winLoseTie = $( '#win-lose-tie' );
-const playerScoreEl = $( '#player-score' );
+
+// computer card elements
 const computerScoreEl = $( '#computer-score' );
-const homeButtonEl = $( '#home' );
+const computerCard = $( '#computer-card' );
+const computerDrawnImage = $( '#computer-drawn-image' );
+const computerDiscardPile = $( '#computer-discard-pile' );
+const computerDiscardImage = $( '#computer-discarded-image' );
+
+// game over elements
 const playAgainButtonEl = $( '#play-again' );
-const playerNameEl = $( '#player-name' );
+const homeButtonEl = $( '#home' );
 
+// general game variables
 let canClickDeck = true;
-
-let playerCardImageURL;
-let computerCardImageURL;
-
-let playerCardValue;
-let computerCardValue;
-
-let playerScore = 0;
-let computerScore = 0;
-
 let cardsRemaining;
 
+// player data
+let playerCardImageURL;
+let playerCardValue;
+let playerScore = 0;
+
+// computer data
+let computerCardImageURL;
+let computerCardValue;
+let computerScore = 0;
+
+// add player name to the game screen
 playerNameEl.prepend( userName );
 
+// save high score
 const saveHighScore = () => {
 
   const highScores = JSON.parse( localStorage.getItem( 'scoreBoard' ) ) || [];
@@ -52,6 +63,7 @@ const saveHighScore = () => {
 
 }
 
+// return card value
 const getCardValue = value => {
 
   let returnValue;
@@ -72,6 +84,7 @@ const getCardValue = value => {
 
 }
 
+// returns flip direction animation based on x coordinate of discard pile
 const flipDirection = ( x ) => {
 
   if ( x < 0 ) return 'cardFlipLeft';
@@ -79,148 +92,188 @@ const flipDirection = ( x ) => {
 
 }
 
+// returns translation difference between deck and discard pile
 const getDiscardDifference = (deckPosition, discardPosition) => ( { left: deckPosition.left - discardPosition.left, top: deckPosition.top - discardPosition.top } );
 
+// determine the winner of the round
 const determineWinner = () => {
 
+  // if player wins
   if ( playerCardValue > computerCardValue ) {
           
+    // update winLoseTie element and add card value player to score
     winLoseTie.text( 'You Win!' );
     playerScore += playerCardValue;
 
+    // clear previous joke and open modal
     jokeDisplayEl.text( '' );
-
     jokeModal.modal( 'open' );
 
+    // get a new joke
     getJoke()
     .then( (data) => {
 
+      
+        // save joke as object with type 1 and unique id
       if (data.type = 'single' && data.joke) {
 
         jokeDisplayEl.html( data.joke );
-
-        // save joke as object with type 1 and unique id
         currentJoke = { type: 1, id: data.id, joke: data.joke };
 
+        // save joke as object with type 2 and unique id
       } else {
 
         jokeDisplayEl.html( `<p>${data.setup}</p><p>${data.delivery}</p>` );
-
-        // save joke as object with type 2 and unique id
         currentJoke = { type: 2, id: data.id, setup: data.setup, delivery: data.delivery };
       }
     } );
   }
 
+  // if player loses
   if ( playerCardValue < computerCardValue ) {
       
-      winLoseTie.text( 'Computer Wins!' );
-      computerScore += computerCardValue;
+    // update winLoseTie element and add card value to computer score
+    winLoseTie.text( 'Computer Wins!' );
+    computerScore += computerCardValue;
   }
 
+  // if the round is a tie update winLoseTie element
   if ( playerCardValue === computerCardValue ) winLoseTie.text( 'It\'s a Tie!' );
 
-  winLoseTie.removeClass( 'invisible' );
+  // update player and computer score elements
   computerScoreEl.text( computerScore );
   playerScoreEl.text( playerScore );
 
 }
 
+// game over function
 const gameOver = () => {
 
+  // display Game Over in the WinLoseTie element
   winLoseTie.text( 'Game Over!' );
+
+  // display game over element
   $( '.game-over' ).removeClass( 'hidden' );
 
+  // if player wins final score
   if ( playerScore > computerScore ) {
     
-    console.log( 'hi' )
-    
+    // save high score
     saveHighScore();
+
+    // add notifications to the winLoseTie element
     winLoseTie.append( '<br>You Won the Game! - High Score Saved.' );
 
   }
 
 }
 
+// 
 deckEl.on( 'click', () => {
 
+  // check if deck click has been disabled
   if( !canClickDeck ) return;
   
+  // hide winLoseTie element
   winLoseTie.addClass( 'invisible' );
 
+  // draw a card
   drawCard( 1 )
   .then ( ( data ) => {
 
-      const playerCoordinates = getDiscardDifference( playerDiscardPile.position(), deckEl.position() );
+    // disable deck clicking during card animations so that it can't be spam clicked
+    canClickDeck = false;
 
+    // calculate player discard position
+    const playerCoordinates = getDiscardDifference( playerDiscardPile.position(), deckEl.position() );
 
-      documentRootEl.css( '--player-flip-direction', flipDirection( playerCoordinates.left ) );
-      documentRootEl.css( '--card-translationX', `${ playerCoordinates.left }px` );
-      documentRootEl.css( '--card-translationY', `${ playerCoordinates.top }px` );
-      
-      canClickDeck = false;
+    // set css variables for player flip direction and card translation
+    documentRootEl.css( '--player-flip-direction', flipDirection( playerCoordinates.left ) );
+    documentRootEl.css( '--card-translationX', `${ playerCoordinates.left }px` );
+    documentRootEl.css( '--card-translationY', `${ playerCoordinates.top }px` );
 
-      playerCardImageURL = data.cards[0].image;
-      playerCardValue = getCardValue( data.cards[0].value );
-      
-      playerDrawnImage.attr( 'src', playerCardImageURL );
-
-      playerCard.addClass( 'player-flip' );
+    // set player card image and value
+    playerCardImageURL = data.cards[0].image;
+    playerCardValue = getCardValue( data.cards[0].value );
+    
+    // set the player card image and start flip animation
+    playerDrawnImage.attr( 'src', playerCardImageURL );
+    playerCard.addClass( 'player-flip' );
 
   } );
 
 } );
 
+// when player card animation ends
 playerCard.on( 'animationend', () => {
 
+  // set player discarded image, reveal it and remove flip animation
   playerDiscardedImage.attr( 'src', playerCardImageURL );
   playerDiscardedImage.removeClass( 'hidden' );
-
   playerCard.removeClass( 'player-flip' );
+
+  // move computer card element to the top z-index
   computerCard.removeClass( 'push-back' );
 
+  // draw a card
   drawCard( 1 )
   .then ( ( data ) => {
 
-      const computerCoordinates = getDiscardDifference( computerDiscardPile.position(), deckEl.position() );
+    // calculate computer discard position
+    const computerCoordinates = getDiscardDifference( computerDiscardPile.position(), deckEl.position() );
 
-      documentRootEl.css( '--computer-flip-direction', flipDirection( computerCoordinates.left ) );
-      documentRootEl.css( '--card-translationX', `${ computerCoordinates.left }px` );
-      documentRootEl.css( '--card-translationY', `${ computerCoordinates.top }px` );
-      
+    // set css variables for computer flip direction and card translation
+    documentRootEl.css( '--computer-flip-direction', flipDirection( computerCoordinates.left ) );
+    documentRootEl.css( '--card-translationX', `${ computerCoordinates.left }px` );
+    documentRootEl.css( '--card-translationY', `${ computerCoordinates.top }px` );
+    
+    // set computer card image and value
+    computerCardImageURL = data.cards[0].image;
+    computerCardValue = getCardValue( data.cards[0].value );
 
-      computerCardImageURL = data.cards[0].image;
-      computerCardValue = getCardValue( data.cards[0].value );
+    // set the computer card image and start flip animation
+    computerDrawnImage.attr( 'src', computerCardImageURL );
+    computerCard.addClass( 'computer-flip' );
 
-      computerDrawnImage.attr( 'src', computerCardImageURL );
-
-      cardsRemaining = data.remaining;
-
-      computerCard.addClass( 'computer-flip' );
+    // set cards remaining in deck
+    cardsRemaining = data.remaining;
 
   } );
 } );
 
+// when computer card animation ends
 computerCard.on( 'animationend', () => {
 
+  // set computer discarded image, reveal it and remove flip animation
   computerDiscardImage.attr( 'src', computerCardImageURL );
   computerDiscardImage.removeClass( 'hidden' );
+
+  // move computer card element to the bottom of the z-index and remove flip animation
   computerCard.addClass( 'push-back' );
   computerCard.removeClass( 'computer-flip' );
 
+  // determine winner and reveal winLoseTie element
   determineWinner();
+  winLoseTie.removeClass( 'invisible' );
 
+  // if less than 2 cards remain in deck end the game
   if ( cardsRemaining < 2 ) gameOver();
+
+  // else re-enable deck clicking
   else canClickDeck = true;
 
 } );
 
-hilariousEl.on( 'click', () => {
+// when save joke button is clicked 
+saveJokeButtonEl.on( 'click', () => {
 
+  // save joke
   saveJoke();
   
 } );
 
+// if home button is clicked send to homepage
 homeButtonEl.on( 'click', () => location.href = 'index.html' );
 
+// if play again button is clicked reload page
 playAgainButtonEl.on( 'click', () => location.reload() );
