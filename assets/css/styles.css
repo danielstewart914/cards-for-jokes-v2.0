@@ -52,6 +52,7 @@ button {
 
 .subtitle {
     text-align: center;
+    font-size: 1.4em;
 }
 
 .sidenav {
@@ -198,11 +199,13 @@ summary {
     align-items: center;
 }
 
+
+
 .joke {
     border: 0;
     width: 100%;
     font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
+    font-size: 1.2rem;
     color: blue;
     margin-top: 2rem;
 }
