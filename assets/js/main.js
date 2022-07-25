@@ -94,7 +94,7 @@ const initialize = () => {
   if ( !deckId.id || isTimeStampOlderThanTwoWeeks( deckId.timeStamp , luxon.DateTime.now() ) ) {
 
     getNewDeck( 1 )
-    .then ( function (  data ) {
+    .then ( ( data ) => {
 
       const newId = data.deck_id;
       const timeStamp = luxon.DateTime.now();
