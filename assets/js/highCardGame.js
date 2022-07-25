@@ -43,26 +43,6 @@ let computerScore = 0;
 // add player name to the game screen
 playerNameEl.prepend( userName );
 
-// save high score
-const saveHighScore = () => {
-
-  const highScores = JSON.parse( localStorage.getItem( 'scoreBoard' ) ) || [];
-
-  const currentScore = {
-    name: userName,
-    score: playerScore
-  }
-
-  highScores.push( currentScore );
-
-  highScores.sort( ( a, b ) => b.score - a.score );
-
-  if ( highScores.length > 10 ) highScores.pop(); 
-
-  localStorage.setItem( 'scoreBoard', JSON.stringify( highScores ) );
-
-}
-
 // return card value
 const getCardValue = value => {
 
@@ -86,17 +66,6 @@ const getCardValue = value => {
   return parseInt( value );
 
 }
-
-// returns flip direction animation based on x coordinate of discard pile
-const flipDirection = ( x ) => {
-
-  if ( x < 0 ) return 'cardFlipLeft';
-  return 'cardFlipRight';
-
-}
-
-// returns translation difference between deck and discard pile
-const getDiscardDifference = (deckPosition, discardPosition) => ( { left: deckPosition.left - discardPosition.left, top: deckPosition.top - discardPosition.top } );
 
 // determine the winner of the round
 const determineWinner = () => {

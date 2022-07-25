@@ -49,15 +49,25 @@ const saveJoke = () => {
 
 }
 
-// initialize modals on all pages where main.js is loaded
-$( document ).ready( () => {
-  $( '.modal' ).modal();
-});
+// save high score
+const saveHighScore = () => {
 
-// initialize sidenav
-$( document ).ready( () => {
-  $( '.sidenav' ).sidenav();
-});
+  const highScores = JSON.parse( localStorage.getItem( 'scoreBoard' ) ) || [];
+
+  const currentScore = {
+    name: userName,
+    score: playerScore
+  }
+
+  highScores.push( currentScore );
+
+  highScores.sort( ( a, b ) => b.score - a.score );
+
+  if ( highScores.length > 10 ) highScores.pop(); 
+
+  localStorage.setItem( 'scoreBoard', JSON.stringify( highScores ) );
+
+}
 
 // returns true if time stamp is older than two weeks
 const isTimeStampOlderThanTwoWeeks = ( timeStamp, now) => {
@@ -224,7 +234,29 @@ const renderBottomRow = () => {
 
 }
 
+// returns flip direction animation based on x coordinate of discard pile
+const flipDirection = ( x ) => {
+
+  if ( x < 0 ) return 'cardFlipLeft';
+  return 'cardFlipRight';
+
+}
+
+// returns translation difference between deck and discard pile
+const getDiscardDifference = (deckPosition, discardPosition) => ( { left: deckPosition.left - discardPosition.left, top: deckPosition.top - discardPosition.top } );
+
 // global function calls
+
+// initialize modals on all pages where main.js is loaded
+$( document ).ready( () => {
+  $( '.modal' ).modal();
+});
+
+// initialize sidenav
+$( document ).ready( () => {
+  $( '.sidenav' ).sidenav();
+});
+
 initialize();
 
 
