@@ -24,7 +24,7 @@ $( '#clear-scores' ).on( 'click', () => {
   // clear high scores
   highScores = [];
   
-  // rerender high scores
+  // re-render high scores
   highScoresEl.html( renderScores( highScores ) );
   
   // clear local storage

@@ -1,13 +1,14 @@
 // elements used on all pages
-const bottomCardRowEl = $( '#bottomCardRow' );
-const deckOfCardApiRootUrl = 'https://deckofcardsapi.com/api/deck';
-let deckId = JSON.parse( localStorage.getItem( 'deck_id' ) ) || {};
 const documentRootEl = $( ':root' );
+const deckOfCardApiRootUrl = 'https://deckofcardsapi.com/api/deck';
+const bottomCardRowEl = $( '#bottomCardRow' );
+let deckId = JSON.parse( localStorage.getItem( 'deck_id' ) ) || {};
 
 // user settings
 let userName = localStorage.getItem( 'user_name' );
 let themeIndex =  localStorage.getItem( 'deck_theme' );
 
+// deck theme image urls
 const themes = [ 
   'https://deckofcardsapi.com/static/img/back.png', 
   './assets/images/batman-deck-theme.jpg', 
@@ -32,8 +33,8 @@ const themeDisplayEl = $( '#theme-display' );
 
 //  joke variables
 const jokeAPIUrl ='https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&amount=1';
-let currentJoke;
 const myJokes = JSON.parse( localStorage.getItem( 'jokes' ) ) || [];
+let currentJoke;
 
 // save jokes to local storage
 const saveJoke = () => {
