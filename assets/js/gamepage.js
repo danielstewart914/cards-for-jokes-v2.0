@@ -1,11 +1,37 @@
-const centerThemeCard = $('#center-theme');
-const userCardEl = $('#user-card');
-const computerCardEl = $('#computer-card');
 const hilariousEl = $('#hilarious')
 const jokeModal = $( '#jokeModal' );
 const jokeBoxEl = $( '#jokeBox' );
-const loseTieEl = $( '#lose-tie' );
-let score = 0;
+
+const deckEl = $( '#deck' );
+const playerCard = $( '#player-card' );
+const playerDrawnImage = $( '#player-drawn-image' );
+const computerDrawnImage = $( '#computer-drawn-image' );
+const computerCard = $( '#computer-card' );
+const computerDiscardPile = $( '#computer-discard-pile' );
+const computerDiscardImage = $( '#computer-discarded-image' );
+const playerDiscardPile = $( '#player-discard-pile' );
+const playerDiscardedImage = $( '#player-discarded-image' );
+const winLoseTie = $( '#win-lose-tie' );
+const playerScoreEl = $( '#player-score' );
+const computerScoreEl = $( '#computer-score' );
+const homeButtonEl = $( '#home' );
+const playAgainButtonEl = $( '#play-again' );
+const playerNameEl = $( '#player-name' );
+
+let canClickDeck = true;
+
+let playerCardImageURL;
+let computerCardImageURL;
+
+let playerCardValue;
+let computerCardValue;
+
+let playerScore = 0;
+let computerScore = 0;
+
+let cardsRemaining;
+
+playerNameEl.prepend( userName );
 
 const saveHighScore = () => {
 
@@ -26,121 +52,137 @@ const saveHighScore = () => {
 
 }
 
-/* Determine the winner based on the card value of user and computer */
+const getCardValue = value => {
 
-function determineWinner(user_val, comp_val, remaining) {
+  let returnValue;
+  switch ( value ) {
 
-  // Value assigned for non number value cards
-  var cards_value = {
-    'KING' : 13,
-    'QUEEN' : 12,
-    'JACK' : 11,
-    'ACE' : 0
-  };
-  
-  if (cards_value[user_val] !== undefined){
-    user_val = cards_value[user_val];
+      case 'KING': returnValue = 13;
+      break;
+      case 'QUEEN': returnValue = 12;
+      break;
+      case 'JACK': returnValue = 11;
+      break;
+      case 'ACE': returnValue = 1;
+      break;
+      default: returnValue = parseInt( value );
   }
-  
-  if (cards_value[comp_val] !== undefined){
-    comp_val = cards_value[comp_val];
-  }
-  
-  user_val = parseInt(user_val);
-  comp_val = parseInt(comp_val);
-  
-  // Compare the card values
-  if(user_val == comp_val){
-    loseTieEl.html( 'It\'s a tie!<br>Click the deck to draw another card' );
-    endGame(remaining);
-  } else if(user_val > comp_val ) {
-    loseTieEl.text( 'Click the deck to draw a card' );
-    // Opens the joke modal
-    jokeBoxEl.html('');
-    jokeModal.modal( 'open' );
-    score +=user_val;
-    getJoke().then( function(data) {
-      if (data.type = 'single' && data.joke) {
 
-        jokeBoxEl.html( data.joke );
+  return returnValue;
 
-        // save joke as object with type 1 and unique id
-        currentJoke = { type: 1, id: data.id, joke: data.joke };
-
-      } else {
-
-        jokeBoxEl.html( `<p>${data.setup}</p><p>${data.delivery}</p>` );
-
-        // save joke as object with type 2 and unique id
-        currentJoke = { type: 2, id: data.id, setup: data.setup, delivery: data.delivery };
-      }
-      // To prevent previous initializations of the same button
-      hilariousEl.off("click").on('click', function(event) {
-        event.preventDefault();
-        saveJoke();
-      });
-    }).then(function() {
-      endGame(remaining);
-    });
-  } else {
-    loseTieEl.html( 'Computer Wins!<br>Click your deck to try again' );
-    endGame(remaining);
-  }
 }
 
-// When the center deck is clicked, two cards are drawn and winner is determined
-centerThemeCard.on('click', function(event) {
-  event.preventDefault();
-  drawCard(2).then(function(data) {
-    userCardEl.css('background-image', 'url('+ data.cards[0].image+')');
-    computerCardEl.css('background-image', 'url('+ data.cards[1].image+')');
-  
-    // Determine who is the winner
-    determineWinner(data.cards[0].value,data.cards[1].value, data.remaining);
-  });
-});
+const flipDirection = ( x ) => {
 
-function endGame(remaining) {
+  if ( x < 0 ) return 'cardFlipLeft';
+  return 'cardFlipRight';
 
-  if (remaining == 0){
-    saveHighScore();
-
-    $( '.game-play' ).addClass( 'hidden' );
-    loseTieEl.addClass( 'hidden' );
-
-    // To display game over
-    var gameEndDiv = $('#game-end');
-    gameEndDiv.attr('class', 'game-over')
-    var newDiv = $('<div>');
-    var newPara = $('<p>');
-    newPara.attr('class', 'label center-align')
-    newPara.text('Game Over');
-    newDiv.append(newPara);
-
-    // To display the score
-    var scorePara = $('<p>');
-    scorePara.attr('class', 'label center-align')
-    scorePara.text('Your score is: ' +score);
-    newDiv.append(scorePara);
-
-    // To view the high scores page
-    var gameEndMessage = $('<p>').text("Visit the High Scores page to view your score!");
-    gameEndMessage.attr("class", "label center-align")
-    newDiv.append(gameEndMessage);
-
-    // To play the game again
-    var restartButton = $('<button>');
-    restartButton.attr('class', 'restart-btn waves-effect waves-light btn brown darken-4 white-text');
-    restartButton.text('Restart Game');
-    restartButton.on('click', function(event) {
-      event.preventDefault();
-      location.reload();
-    });
-    newDiv.append(restartButton);
-
-    gameEndDiv.append(newDiv);
-
-  }
 }
 
+const getDiscardDifference = (deckPosition, discardPosition) => ( { left: deckPosition.left - discardPosition.left, top: deckPosition.top - discardPosition.top } );
 
+const determineWinner = () => {
+
+  if ( playerCardValue > computerCardValue ) {
+          
+      winLoseTie.text( 'You Win!' );
+      playerScore += playerCardValue;
+  }
+
+  if ( playerCardValue < computerCardValue ) {
+      
+      winLoseTie.text( 'Computer Wins!' );
+      computerScore += computerCardValue;
+  }
+
+  if ( playerCardValue === computerCardValue ) winLoseTie.text( 'It\'s a Tie!' );
+
+  winLoseTie.removeClass( 'invisible' );
+  computerScoreEl.text( computerScore );
+  playerScoreEl.text( playerScore );
+
+}
+
+const gameOver = () => {
+
+  winLoseTie.text( 'Game Over!' );
+  $( '.game-over' ).removeClass( 'hidden' );
+
+}
+
+deckEl.on( 'click', () => {
+
+  if( !canClickDeck ) return;
+
+  winLoseTie.addClass( 'invisible' );
+
+  drawCard( 1 )
+  .then ( ( data ) => {
+
+      const playerCoordinates = getDiscardDifference( playerDiscardPile.position(), deckEl.position() );
+
+
+      documentRootEl.css( '--player-flip-direction', flipDirection( playerCoordinates.left ) );
+      documentRootEl.css( '--card-translationX', `${ playerCoordinates.left }px` );
+      documentRootEl.css( '--card-translationY', `${ playerCoordinates.top }px` );
+      
+      canClickDeck = false;
+
+      playerCardImageURL = data.cards[0].image;
+      playerCardValue = getCardValue( data.cards[0].value );
+      
+      playerDrawnImage.attr( 'src', playerCardImageURL );
+
+      playerCard.addClass( 'player-flip' );
+
+  } );
+
+} );
+
+playerCard.on( 'animationend', () => {
+
+  playerDiscardedImage.attr( 'src', playerCardImageURL );
+  playerDiscardedImage.removeClass( 'hidden' );
+
+  playerCard.removeClass( 'player-flip' );
+  computerCard.removeClass( 'push-back' );
+
+  drawCard( 1 )
+  .then ( ( data ) => {
+
+      const computerCoordinates = getDiscardDifference( computerDiscardPile.position(), deckEl.position() );
+
+      documentRootEl.css( '--computer-flip-direction', flipDirection( computerCoordinates.left ) );
+      documentRootEl.css( '--card-translationX', `${ computerCoordinates.left }px` );
+      documentRootEl.css( '--card-translationY', `${ computerCoordinates.top }px` );
+      
+
+      computerCardImageURL = data.cards[0].image;
+      computerCardValue = getCardValue( data.cards[0].value );
+
+      computerDrawnImage.attr( 'src', computerCardImageURL );
+
+      cardsRemaining = data.remaining;
+
+      computerCard.addClass( 'computer-flip' );
+
+  } );
+} );
+
+computerCard.on( 'animationend', () => {
+
+  computerDiscardImage.attr( 'src', computerCardImageURL );
+  computerDiscardImage.removeClass( 'hidden' );
+  computerCard.addClass( 'push-back' );
+  computerCard.removeClass( 'computer-flip' );
+
+  determineWinner();
+
+  if ( cardsRemaining < 2 ) gameOver();
+  else canClickDeck = true;
+
+} );
+
+homeButtonEl.on( 'click', () => location.href = 'index.html' );
+
+playAgainButtonEl.on( 'click', () => location.reload() );

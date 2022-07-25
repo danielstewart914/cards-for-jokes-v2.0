@@ -4,12 +4,9 @@
 }
 
 body {
-    display: flex;
-    flex-flow: column;
-    height: 100vh;
     font-family: 'Poppins', sans-serif;
     background-image: url(../images/background.jpg);
-    background-attachment: fixed;
+
 }   
 
 body .modal {
@@ -18,9 +15,10 @@ body .modal {
 
 main {
     display: flex;
-    flex-direction: column; 
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    padding-top: 160px;
     padding-bottom: 110px;
 }
 
@@ -151,13 +149,6 @@ summary {
     text-align: center;
 }
 
-.deck {
-    width: 20%;
-    aspect-ratio: 2 / 3;
-    border: solid black 2px;
-    border-radius: 0.7rem;
-} 
-
 #rulesBox {
     display: flex;
     border: black solid 1px;
@@ -212,14 +203,6 @@ summary {
     align-items: center;
 }
 
-.invisible {
-    visibility: hidden;
-}
-
-.hidden {
-    display: none;
-}
-
 #jokeBox {
     display: flex;
     justify-content: center;
@@ -241,49 +224,189 @@ summary {
     padding: .5em;
 }
 
-.game-over {
-    text-align: center;
-    margin-top: 110px;
-    background-color: #1E5848;
-}
-
-.restart-btn {
-    margin-bottom: 1rem;
-}
+.deck-theme {
+    width: 20%;
+    aspect-ratio: 2 / 3;
+    border: solid black 2px;
+    border-radius: 0.7rem;
+} 
 
 @media screen and (min-width: 992px) {
-    .deck {
+    .deck-theme {
         width: 10%;
     }
 }
 
-@media screen and (max-width: 768px) {
-   .brand-logo {    
-        font-size: 1.5rem !important;
-    }
-    .mobile-card {
-        width: 20vw !important;
-    }
-    .drawPile {
-        order: 1;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-    }
-    .drawnCard {
-        width: 50%;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
+/* new css */
+
+.playing-card-container {
+    position: relative;
+    background-color: transparent;
+    perspective: 2000px;
+    width: 15vw;
+    max-width: 200px;
+    min-width: 100px;
+    aspect-ratio: 2 / 3;
+    margin: 1rem;
+}
+
+.playing-card {
+    position: relative;
+    inset: 0;
+    border-radius: 0.8em;
+    transform-origin: center;
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.playing-card-front, .playing-card-back {
+    position: absolute;
+    inset: 0;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.player-flip, .computer-flip {
+    animation-duration: 550ms;
+    animation-timing-function: ease-in-out;
+}
+
+.player-flip {
+    animation-name: var(--player-flip-direction);
+}
+
+.computer-flip {
+    animation-name: var(--computer-flip-direction);
+}
+
+.playing-card-back + .playing-card-front {
+    transform: rotateY(180deg);
+}
+
+.playing-card-front > img, .playing-card-back > img {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+}
+
+.playing-card-back > img {
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.score {
+    position: absolute;
+    width: 100%;
+    top: -3em;
+    text-align: center;
+    font-size: 1.3rem;
+}
+
+.push-back {
+    z-index: -1;
+}
+
+.push-forward {
+    z-index: 1;
+}
+
+.break {
+    display: flex;
+    justify-content: center;
+    flex-basis: 100%;
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+}
+
+.invisible {
+    visibility: hidden !important;
+}
+
+.game-over {
+    order: 4;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.GO-button {
+    margin: 1rem;
+    background-color: #ff6d00 !important;
+    font-size: 1rem !important;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+.brand-logo {    
+    font-size: 1.5rem !important;
+}
+
+@keyframes cardFlipRight {
+    0% { transform: translate( 0, 0 ) translateZ( 0 ) rotateY( 0 ); }
+    25% { transform: translateZ( 50px ); }
+    100% { transform: translate( var(--card-translationX), var(--card-translationY) ) translateZ( 0 ) rotateY( 180deg ); }
+}
+
+@keyframes cardFlipLeft {
+    0% { transform: translate( 0, 0 ) translateZ( 0 ) rotateY( 0 ); }
+    25% { transform: translateZ( 50px ); }
+    100% { transform: translate( var(--card-translationX), var(--card-translationY) ) translateZ( 0 ) rotateY( -180deg ); }
+}
+
+@media screen and ( min-width: 768px) {
+    .playing-card-container {
+        margin: 1rem 3vw;
     }
 
-    .game-card {
-        border-radius: 0.4rem;
+    .deck{
+        order: 2;
     }
 
-   }
+    .player-discard {
+        order: 1
+    }
 
- 
+    .computer-discard {
+        order: 3;
+    }
 
+    .player-flip, .computer-flip {
+        animation-duration: 450ms;
+    }
 
+    .brand-logo {    
+        font-size: 2.1rem !important;
+    }
+    
+}
+
+@media screen and ( min-width: 900px ) {
+    .playing-card-back > img {
+        border-radius: 7px;
+    }
+}
+
+@media screen and ( min-width: 1100px ) {
+    .playing-card-back > img {
+        border-radius: 8px;
+    }
+}
+
+@media screen and ( min-width: 1200px ) {
+    .playing-card-back > img {
+        border-radius: 9px;
+    }
+}
+
+@media screen and ( min-width: 1368px ) {
+    .playing-card-back > img {
+        border-radius: 10px;
+    }
+}

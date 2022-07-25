@@ -24,7 +24,7 @@
 
     <title>Cards for Jokes</title>
   </head>
-  <body class="flow-text">
+  <body>
 
     <!-- Navbar  -->
     <nav class="nav-wrapper valign-wrapper">
@@ -38,8 +38,6 @@
             <li><a class="white-text" href="index.html"><i class="material-icons left white-text">home</i>Home</a></li>
             <li><a class="white-text" href="highscores.html"><i class="material-icons left white-text">scoreboard</i>High Scores</a></li>
             <li><a class="white-text" href="myjokes.html"><i class="material-icons left white-text">speaker_notes</i>My Jokes</a></li>
-            <!-- Temporary Modal Trigger
-            <li class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</li> -->
           </ul>
       </div>
     </nav>
@@ -47,29 +45,56 @@
     <!-- Side nav trigger for small screens -->
     <ul class="sidenav lime darken-2 center-align white-text" id="mobile-links">
         <li><a href="index.html"><i class="material-icons left white-text">home</i></a></li>
-        <li><a href="highscores.html"><i class="material-icons left white-text">view_list</i></a></li>
-        <li><a href="myjokes.html"><i class="material-icons left white-text">gamepad</i></a></li>
+        <li><a href="highscores.html"><i class="material-icons left white-text">scoreboard</i></a></li>
+        <li><a href="myjokes.html"><i class="material-icons left white-text">speaker_notes</i></a></li>
     </ul>
     <main>
-      <div class="game-play container" id="game-play-container">
-        <div class="center-align drawnCard">
-            <div class="game-card card-back mobile-card card-overlay z-depth-3 gameBox" id="user-card">
+      <div id="player-discard-pile"  class="playing-card-container push-back player-discard">
+        <div id="player-name" class="score bold"><br>
+            Score: <span id="player-score">0</span></div>
+        <div class="playing-card">
+            <div class="playing-card-front">
+                <img id="player-discarded-image" src=""  class="hidden">
             </div>
-            <p class="label">User</p>
-          </div>
-          <div class="center-align drawPile">
-            <a class="game-card card-back mobile-card card-overlay z-depth-3 userDeck" id="center-theme" href="#">
-            </a>
-            <p class="label">Deck</p>
-          </div>
-          <div class="center-align drawnCard">
-            <div class="game-card card-back mobile-card card-overlay z-depth-3 gameBox" id="computer-card">
+        </div>
+    </div>
+    <div id="computer-discard-pile"  class="playing-card-container push-back computer-discard">
+        <div class="score bold">Computer<br>
+            Score: <span id="computer-score">0</span></div>
+        <div class="playing-card">
+            <div class="playing-card-front">
+                <img id="computer-discarded-image" src=""  class="hidden">
             </div>
-            <p class="label">Computer</p>
-          </div>
-      </div>
-      <div id="lose-tie" class="black-text center-align">Click the deck to draw a card</div>
-      <div id="game-end"></div>
+        </div>
+    </div>
+    <div class="break">
+        <span class="bold" id="win-lose-tie">Click on the Deck to Draw a Card.</span>
+    </div>
+    <div id="deck" class="playing-card-container deck">
+        <div id="player-card" class="playing-card player-card">
+            <div class="playing-card-back">
+                <img src="./assets/images/batman-deck-theme.jpg">
+            </div>
+            <div class="playing-card-front">
+                <img id="player-drawn-image" src="">
+            </div>
+        </div>
+        <div id="computer-card" class="playing-card player-card push-back">
+            <div class="playing-card-back">
+                <img src="./assets/images/batman-deck-theme.jpg">
+            </div>
+            <div class="playing-card-front">
+                <img id="computer-drawn-image" src="">
+            </div>
+        </div>
+        <div class="playing-card-back push-back">
+            <img src="./assets/images/batman-deck-theme.jpg">
+        </div>
+    </div>
+    <div class="game-over hidden">
+        <button id="home" class="GO-button waves-effect waves-light btn white-text">Home</button>
+        <button id="play-again" class="GO-button waves-effect waves-light btn white-text">Play Again</button>
+    </div>
       <div class="card-row" id="bottomCardRow"></div>
     </main>
 
