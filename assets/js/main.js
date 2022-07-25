@@ -70,12 +70,12 @@ const saveHighScore = () => {
 }
 
 // returns true if time stamp is older than two weeks
-const isTimeStampOlderThanTwoWeeks = ( timeStamp, now) => {
+const isTimeStampOlderThanTwoWeeks = ( timeStamp, now ) => {
   
   // get the difference between timestamp and now
   const difference = now.diff( luxon.DateTime.fromISO( timeStamp ) );
 
-  // if the timestamp is older than two weeks get a new on
+  // if the timestamp is older than two weeks return true
   if( difference.as( 'weeks' ) > 2 ) return true;
 
   return false;
@@ -130,15 +130,20 @@ const initialize = () => {
 
 }
 
+// change card theme
 const changeTheme = () => {
 
+  // change theme display
   themeDisplayEl.attr( 'src',  themes[ themeIndex ] );
+
+  // change all card back images to selected theme
   $( '.playing-card-back > img' ).attr( 'src', themes[ themeIndex ] );
 
   if ( themeIndex > 0 ) {
     documentRootEl.css( '--cardThemeUrl', `url( '../.${ themes[ themeIndex ] }' )` );
     documentRootEl.css( '--theme-border', '1px solid black' )
   }
+
   else documentRootEl.css( '--cardThemeUrl', `url( '${ themes[ themeIndex ] }' )` );
 
 }
@@ -248,23 +253,18 @@ const getDiscardDifference = (deckPosition, discardPosition) => ( { left: deckPo
 // global function calls
 
 // initialize modals on all pages where main.js is loaded
-$( document ).ready( () => {
-  $( '.modal' ).modal();
-});
+$( document ).ready( () => $( '.modal' ).modal() );
 
 // initialize sidenav
-$( document ).ready( () => {
-  $( '.sidenav' ).sidenav();
-});
+$( document ).ready( () => $( '.sidenav' ).sidenav() );
 
 initialize();
-
 
 highCardGameEl.on( 'click', ( event ) => {
 
   event.preventDefault();
 
-  if( userName ) location.href = 'highCardGame.html';
+  if ( userName ) location.href = 'highCardGame.html';
 
   else {
     
