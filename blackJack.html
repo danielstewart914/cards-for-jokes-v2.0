@@ -22,7 +22,7 @@
     <!-- CSS link -->
     <link rel="stylesheet" href="./assets/css/styles.css">
 
-    <title>Cards for Jokes - High Card Wins</title>
+    <title>Cards for Jokes - Blackjack</title>
   </head>
   <body>
 
@@ -49,53 +49,7 @@
         <li><a href="myjokes.html"><i class="material-icons left white-text">speaker_notes</i></a></li>
     </ul>
     <main>
-      <div id="player-discard-pile"  class="playing-card-container push-back player-discard">
-        <div id="player-name" class="score bold"><br>
-            Score: <span id="player-score">0</span></div>
-        <div class="playing-card">
-            <div class="playing-card-front">
-                <img id="player-discarded-image" src=""  class="hidden">
-            </div>
-        </div>
-    </div>
-    <div id="computer-discard-pile"  class="playing-card-container push-back computer-discard">
-        <div class="score bold">Computer<br>
-            Score: <span id="computer-score">0</span></div>
-        <div class="playing-card">
-            <div class="playing-card-front">
-                <img id="computer-discarded-image" src=""  class="hidden">
-            </div>
-        </div>
-    </div>
-    <div class="break">
-        <span class="bold" id="win-lose-tie">Click on the Deck to Draw a Card.</span>
-    </div>
-    <div id="deck" class="playing-card-container deck">
-        <div id="player-card" class="playing-card player-card">
-            <div class="playing-card-back">
-                <img src="">
-            </div>
-            <div class="playing-card-front">
-                <img id="player-drawn-image" src="">
-            </div>
-        </div>
-        <div id="computer-card" class="playing-card player-card push-back">
-            <div class="playing-card-back">
-                <img src="">
-            </div>
-            <div class="playing-card-front">
-                <img id="computer-drawn-image" src="">
-            </div>
-        </div>
-        <div class="playing-card-back push-back">
-            <img src="">
-        </div>
-    </div>
-    <div class="game-over hidden">
-        <button id="home" class="GO-button waves-effect waves-light btn white-text">Home</button>
-        <span id="final-score">&nbsp;</span>
-        <button id="play-again" class="GO-button waves-effect waves-light btn white-text">Play Again</button>
-    </div>
+     
       <div class="card-row" id="bottomCardRow"></div>
     </main>
 
@@ -119,6 +73,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.4.0/luxon.min.js" integrity="sha512-v1zUTZ9zv9Wb2scL/ANxXM6m7yegm/W5SN8SRHNFADdZIuSFFkrEBjNxO803DdFkjoCcJ88g1WHRVlLN6K/O1A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="./assets/js/main.js"></script>
-    <script src="./assets/js/highCardGame.js"></script>
+    <script src="./assets/js/blackjack.js"></script>
   </body>
 </html>
