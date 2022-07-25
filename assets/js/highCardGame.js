@@ -102,7 +102,7 @@ const determineWinner = () => {
   if ( playerCardValue > computerCardValue ) {
           
     // update winLoseTie element and add card value player to score
-    winLoseTie.text( 'You Win!' );
+    winLoseTie.text( 'You Won this Round!' );
     playerScore += playerCardValue;
 
     // clear previous joke and open modal
@@ -133,12 +133,12 @@ const determineWinner = () => {
   if ( playerCardValue < computerCardValue ) {
       
     // update winLoseTie element and add card value to computer score
-    winLoseTie.text( 'Computer Wins!' );
+    winLoseTie.text( 'Computer Won this Round!' );
     computerScore += computerCardValue;
   }
 
   // if the round is a tie update winLoseTie element
-  if ( playerCardValue === computerCardValue ) winLoseTie.text( 'It\'s a Tie!' );
+  if ( playerCardValue === computerCardValue ) winLoseTie.text( 'This Round is a Tie!' );
 
   // update player and computer score elements
   computerScoreEl.text( computerScore );
@@ -168,7 +168,7 @@ const gameOver = () => {
 
 }
 
-// 
+// when the deck is clicked
 deckEl.on( 'click', () => {
 
   // check if deck click has been disabled
