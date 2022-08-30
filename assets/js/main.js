@@ -312,7 +312,7 @@ playGameElButton.on( 'click', () => {
 
   saveUserName();
 
-  location.href = 'gamepage.html';
+  location.href = 'highCardGame.html';
 
 } );
 
