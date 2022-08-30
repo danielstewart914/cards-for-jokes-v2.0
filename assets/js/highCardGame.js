@@ -68,7 +68,7 @@ const getCardValue = value => {
 }
 
 // determine the winner of the round
-const determineWinner = () => {
+const determineWinner = async () => {
 
   // if player wins
   if ( playerCardValue > computerCardValue ) {
@@ -82,9 +82,7 @@ const determineWinner = () => {
     jokeModal.modal( 'open' );
 
     // get a new joke
-    getJoke()
-    .then( (data) => {
-
+    const data = await getJoke()
       
         // save joke as object with type 1 and unique id
       if (data.type = 'single' && data.joke) {
@@ -98,14 +96,13 @@ const determineWinner = () => {
         jokeDisplayEl.html( `<p>${data.setup}</p><p>${data.delivery}</p>` );
         currentJoke = { type: 2, id: data.id, setup: data.setup, delivery: data.delivery };
       }
-    } );
   }
 
   // if player loses
   if ( playerCardValue < computerCardValue ) {
       
     // update winLoseTie element and add card value to computer score
-    winLoseTie.text( 'Computer Won this Round!' );
+    winLoseTie.text( 'The Computer Won this Round!' );
     computerScore += computerCardValue;
   }
 
@@ -141,7 +138,7 @@ const gameOver = () => {
 }
 
 // when the deck is clicked
-deckEl.on( 'click', () => {
+deckEl.on( 'click', async () => {
 
   // check if deck click has been disabled
   if( !canClickDeck ) return;
@@ -150,8 +147,7 @@ deckEl.on( 'click', () => {
   winLoseTie.addClass( 'invisible' );
 
   // draw a card
-  drawCard( 1 )
-  .then ( ( data ) => {
+  const data = await drawCard( 1 )
 
     // disable deck clicking during card animations so that it can't be spam clicked
     canClickDeck = false;
@@ -172,12 +168,10 @@ deckEl.on( 'click', () => {
     playerDrawnImage.attr( 'src', playerCardImageURL );
     playerCard.addClass( 'player-flip' );
 
-  } );
-
 } );
 
 // when player card animation ends
-playerCard.on( 'animationend', () => {
+playerCard.on( 'animationend', async () => {
 
   // set player discarded image, reveal it and remove flip animation
   playerDiscardedImage.attr( 'src', playerCardImageURL );
@@ -188,9 +182,7 @@ playerCard.on( 'animationend', () => {
   computerCard.removeClass( 'push-back' );
 
   // draw a card
-  drawCard( 1 )
-  .then ( ( data ) => {
-
+  const data = await drawCard( 1 )
     // calculate computer discard position
     const computerCoordinates = getDiscardDifference( computerDiscardPile.position(), deckEl.position() );
 
@@ -209,8 +201,6 @@ playerCard.on( 'animationend', () => {
 
     // set cards remaining in deck
     cardsRemaining = data.remaining;
-
-  } );
 } );
 
 // when computer card animation ends

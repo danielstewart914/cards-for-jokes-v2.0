@@ -83,7 +83,7 @@ const isTimeStampOlderThanTwoWeeks = ( timeStamp, now ) => {
 }
 
 // initialize data
-const initialize = () => {
+const initialize = async () => {
 
   // if there is a user name show welcome element
   if ( userName ) {
@@ -102,10 +102,9 @@ const initialize = () => {
   }
 
   // if deckId is old format or older than two weeks get new deck_id
-  if ( !deckId.id || isTimeStampOlderThanTwoWeeks( deckId.timeStamp , luxon.DateTime.now() ) ) {
+  if ( !deckId.id || isTimeStampOlderThanTwoWeeks( deckId.timeStamp, luxon.DateTime.now() ) ) {
 
-    getNewDeck( 1 )
-    .then ( ( data ) => {
+    const data = await getNewDeck( 1 )
 
       const newId = data.deck_id;
       const timeStamp = luxon.DateTime.now();
@@ -118,15 +117,9 @@ const initialize = () => {
 
       localStorage.setItem( 'deck_id', JSON.stringify( deckId ) );
 
-      renderBottomRow();
-
-      } );
-
-      } else {
+      } 
 
       renderBottomRow();
-
-      }
 
 }
 
@@ -209,15 +202,13 @@ const drawCard = async ( numberOfCards ) => {
 }
 
 // render bottom row of cards on main screen
-const renderBottomRow = () => {
+const renderBottomRow = async () => {
 
   // first shuffle deck
-  shuffleDeck( deckId.id, false )
-  .then ( () => {
+  await shuffleDeck( deckId.id, false );
 
   // draw all cards
-  drawCard( 52 )
-  .then ( ( data ) => {
+  const data = await drawCard( 52 )
 
     const rowFrag = $( document.createDocumentFragment() );
 
@@ -232,10 +223,7 @@ const renderBottomRow = () => {
     // set contents of with bottom row element with fragment
     bottomCardRowEl.html( rowFrag );
 
-  } )
-  .then( () => { shuffleDeck( deckId.id, false ) } );
-
-} );
+    await shuffleDeck( deckId.id, false );
 
 }
 
